@@ -30,7 +30,9 @@ _`Admin available:`_
     - Date of Birth
 
 Giving users access to the entities id would be an improvement to the application, since it is the parameter used to interact with the entities.
-
+## Running the application
+### docker-compose
+The application can be run using docker-compose. The docker-compose file is available in the root directory.
 ## Requests
 ([postman](https://www.postman.com/) collection is available in the root directory)
 
