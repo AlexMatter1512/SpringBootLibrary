@@ -1,5 +1,6 @@
 package com.example.library.db.entities;
 
+import com.example.library.db.dtos.AutoreDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -21,4 +22,9 @@ public class Autore {
     private String cognome;
     private LocalDate dataNascita;
 
+    public Autore(AutoreDto autoreDto) {
+        this.nome = autoreDto.getNome();
+        this.cognome = autoreDto.getCognome();
+        this.dataNascita = autoreDto.getDataNascita();
+    }
 }

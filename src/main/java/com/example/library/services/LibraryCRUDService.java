@@ -1,5 +1,6 @@
 package com.example.library.services;
 
+import com.example.library.db.dtos.AutoreDto;
 import com.example.library.db.dtos.LibroDto;
 import com.example.library.db.entities.Autore;
 import com.example.library.db.entities.Libro;
@@ -24,7 +25,7 @@ public class LibraryCRUDService {
     }
 
     public Libro aggiungiLibro(LibroDto libroDto) {
-        Autore autoreDto = libroDto.getAutore();
+        AutoreDto autoreDto = libroDto.getAutore();
 
         //se il libro esiste
         Libro existingLibro = LibroRepo.findByTitoloAndAutore_NomeAndAutore_Cognome(libroDto.getTitolo(), autoreDto.getNome(), autoreDto.getCognome());
@@ -49,11 +50,12 @@ public class LibraryCRUDService {
 
         //se il libro e l'autore non esistono
         Libro libro = new Libro();
+        Autore autore = new Autore(autoreDto);
         libro.setTitolo(libroDto.getTitolo());
         libro.setAnnoProduzione(libroDto.getAnnoProduzione());
         libro.setCopieTotali(1);
         libro.setCopieDisponibili(1);
-        libro.setAutore(libroDto.getAutore());
+        libro.setAutore(autore);
 
         return LibroRepo.save(libro);
     }
@@ -71,6 +73,14 @@ public class LibraryCRUDService {
     }
 
     public Autore aggiungiAutore(Autore autore) {
+        try {
+            Autore existingAutore = AutoreRepo.findByNomeAndCognomeAndDataNascita(autore.getNome(), autore.getCognome(), autore.getDataNascita());
+            if (existingAutore != null) {
+                return existingAutore;
+            }
+        } catch (Exception e) {
+            return new Autore();
+        }
         return AutoreRepo.save(autore);
     }
 
