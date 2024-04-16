@@ -32,9 +32,8 @@ public class LibraryCrudController {
     }
 
     @PostMapping("/libri")
-    public Libro aggiungiLibro(@RequestBody Libro libro) {
-
-        return LibraryCRUDService.aggiungiLibro(libro);
+    public Libro aggiungiLibro(@RequestBody LibroDto libroDto) {
+        return LibraryCRUDService.aggiungiLibro(libroDto);
     }
 
     @DeleteMapping("/libri/{id}")
@@ -46,11 +45,6 @@ public class LibraryCrudController {
     public ResponseEntity<Libro> getLibroById(@PathVariable Long id) {
         Optional<Libro> libro = LibraryCRUDService.getLibroById(id);
         return libro.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/libri/{id}")
-    public Libro modificaLibro(@PathVariable Long id, @RequestBody Libro nuovoLibro) {
-        return LibraryCRUDService.modificaLibro(id, nuovoLibro);
     }
 
     @GetMapping("/autori")

@@ -8,7 +8,5 @@ public class LibroDto {
     private String titolo;
     private int annoProduzione;
 
-    private String nomeAutore;
-    private String cognomeAutore;
-    private String dataNascitaAutore;
+    private Autore autore;
 }

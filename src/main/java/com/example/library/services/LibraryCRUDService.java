@@ -1,5 +1,6 @@
 package com.example.library.services;
 
+import com.example.library.db.dtos.LibroDto;
 import com.example.library.db.entities.Autore;
 import com.example.library.db.entities.Libro;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,38 @@ public class LibraryCRUDService {
         return LibroRepo.findAll();
     }
 
-    public Libro aggiungiLibro(Libro libro) {
+    public Libro aggiungiLibro(LibroDto libroDto) {
+        Autore autoreDto = libroDto.getAutore();
+
+        //se il libro esiste
+        Libro existingLibro = LibroRepo.findByTitoloAndAutore_NomeAndAutore_Cognome(libroDto.getTitolo(), autoreDto.getNome(), autoreDto.getCognome());
+        if (existingLibro != null) {
+            existingLibro.setCopieTotali(existingLibro.getCopieTotali() + 1);
+            existingLibro.setCopieDisponibili(existingLibro.getCopieDisponibili() + 1);
+            return LibroRepo.save(existingLibro);
+        }
+
+        //se il libro non esiste ma l'autore si
+        Autore existingAutore = AutoreRepo.findByNomeAndCognomeAndDataNascita(autoreDto.getNome(), autoreDto.getCognome(), autoreDto.getDataNascita());
+        if (existingAutore != null) {
+            Libro libro = new Libro();
+            libro.setTitolo(libroDto.getTitolo());
+            libro.setAnnoProduzione(libroDto.getAnnoProduzione());
+            libro.setCopieTotali(1);
+            libro.setCopieDisponibili(1);
+            libro.setAutore(existingAutore);
+
+            return LibroRepo.save(libro);
+        }
+
+        //se il libro e l'autore non esistono
+        Libro libro = new Libro();
+        libro.setTitolo(libroDto.getTitolo());
+        libro.setAnnoProduzione(libroDto.getAnnoProduzione());
+        libro.setCopieTotali(1);
+        libro.setCopieDisponibili(1);
+        libro.setAutore(libroDto.getAutore());
+
         return LibroRepo.save(libro);
     }
 
@@ -32,11 +64,6 @@ public class LibraryCRUDService {
 
     public Optional<Libro> getLibroById(Long id) {
         return LibroRepo.findById(id);
-    }
-
-    public Libro modificaLibro(Long id, Libro nuovoLibro) {
-        nuovoLibro.setId(id);
-        return LibroRepo.save(nuovoLibro);
     }
 
     public List<Autore> getAllAutori() {

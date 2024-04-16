@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LibroRepo extends JpaRepository<Libro, Long> {
-    //find by titolo and autore
-    Libro findByTitoloAndAutore(String titolo, Autore autore);
+
+    Libro findByTitoloAndAutore_NomeAndAutore_Cognome(String titolo, String nome, String cognome);
 }
